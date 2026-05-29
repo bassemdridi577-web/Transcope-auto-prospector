@@ -45,9 +45,10 @@ async function startServer() {
     
     // Add custom MIME type handling for dev server
     app.use((req, res, next) => {
-      if (req.url.endsWith('.js')) {
+      const url = req.url.split('?')[0];
+      if (url.endsWith('.js') || url.endsWith('.ts') || url.endsWith('.tsx')) {
         res.setHeader('Content-Type', 'application/javascript');
-      } else if (req.url.endsWith('.css')) {
+      } else if (url.endsWith('.css')) {
         res.setHeader('Content-Type', 'text/css');
       }
       next();
