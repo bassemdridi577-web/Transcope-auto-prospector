@@ -42,6 +42,17 @@ async function startServer() {
       },
       appType: "spa",
     });
+    
+    // Add custom MIME type handling for dev server
+    app.use((req, res, next) => {
+      if (req.url.endsWith('.js')) {
+        res.setHeader('Content-Type', 'application/javascript');
+      } else if (req.url.endsWith('.css')) {
+        res.setHeader('Content-Type', 'text/css');
+      }
+      next();
+    });
+
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
