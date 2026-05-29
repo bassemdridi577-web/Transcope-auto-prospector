@@ -15,14 +15,28 @@ export default defineConfig(({mode}) => {
         '@': path.resolve(__dirname, './src'),
       },
     },
+    build: {
+      rollupOptions: {
+        output: {
+          entryFileNames: 'assets/[name]-[hash].js',
+          chunkFileNames: 'assets/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash][extname]',
+        }
+      }
+    },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
+      // Do not modify—file watching is disabled to prevent flickering during agent edits.
       hmr: {
         port: 35000
       },
       watch: {
         ignored: ['**/*.crdownload', '**/Non confirm*', '**/Non confirm*/**']
+      },
+      mimeTypes: {
+        'js': 'application/javascript',
+        'ts': 'application/javascript',
+        'tsx': 'application/javascript',
       }
     },
   };
