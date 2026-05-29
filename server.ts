@@ -43,28 +43,21 @@ async function startServer() {
       appType: "spa",
     });
     
-    // Add custom MIME type handling for dev server
-    app.use((req, res, next) => {
-      const url = req.url.split('?')[0];
-      if (url.endsWith('.js') || url.endsWith('.ts') || url.endsWith('.tsx')) {
-        res.setHeader('Content-Type', 'application/javascript');
-      } else if (url.endsWith('.css')) {
-        res.setHeader('Content-Type', 'text/css');
-      }
-      next();
-    });
-
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath, {
       setHeaders: (res, filePath) => {
-        if (filePath.endsWith('.js')) {
-          res.setHeader('Content-Type', 'application/javascript');
+        if (filePath.endsWith('.js') || filePath.endsWith('.mjs')) {
+          res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
         } else if (filePath.endsWith('.css')) {
-          res.setHeader('Content-Type', 'text/css');
+          res.setHeader('Content-Type', 'text/css; charset=utf-8');
         } else if (filePath.endsWith('.woff2')) {
           res.setHeader('Content-Type', 'font/woff2');
+        } else if (filePath.endsWith('.woff')) {
+          res.setHeader('Content-Type', 'font/woff');
+        } else if (filePath.endsWith('.ttf')) {
+          res.setHeader('Content-Type', 'font/ttf');
         }
       }
     }));
